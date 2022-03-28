@@ -21,6 +21,25 @@
                     <?php comments_number('0 comentários', 'um comentário', '% comentários'); ?>
                 </P>
                 <hr>
+                <h3>Posts Relacionados</h3>
+                <?php
+                    $categories = get_the_category();
+                    $cp_query = new WP_Query(array(
+                        'posts_per_page' => 3,
+                        'post__not_in' => array(get_the_ID()),
+                        'cat' => $categories[0]->term_id
+                    ));
+                    if($cp_query->have_posts()) {
+                        while($cp_query->have_posts()){
+                            $cp_query->the_post();
+
+                            get_template_part('template_parts/related_post');
+                    }
+                    wp_reset_postdata();
+                }
+
+                ?>
+                <hr>
 
                 <?php
                     if(comments_open()){
